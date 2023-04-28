@@ -34,3 +34,16 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                 # SonarCloud access token should be generated from https://sonarcloud.io/account/security/
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}    
+
+          
+  sca:
+      name: Scan SCA with SNYK
+      needs: sast
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@master
+        - name: Run SNYK for check vulnerabilities
+          uses: snyk/actions/gradle-jdk11@master
+          continue-on-error: true
+          env:
+            SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}       
